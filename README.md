@@ -5,7 +5,7 @@ Included within the repository is a copy of this readme file, a license file and
 
 ## Prerequisites
 To get the .py file working without the use of the exe file, you need to download Python 3 or above.
-To download Python go to the [Python](https://www.python.org/downloads/) and click the yellow button-
+To download Python go to the [Python](https://www.python.org/downloads/) web page and click the yellow button-
 under 'Download the latest version for Windows' or select your OS under the yellow button.
 
 ## Installing
