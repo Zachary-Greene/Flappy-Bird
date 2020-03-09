@@ -145,10 +145,8 @@ class Score(object):
         if count <= 9:  # if count is less then or equal to 9 then move on
             win.blit(scores[count], (self.x, self.y))  # draw the score as long as it is below 9
         elif count > 9:
-            win.blit(scores[int(count / 10)], (
-            self.x, self.y))  # draw the first digit *bug* index out of range when score reaches 19 see line 118
-            win.blit(scores[count % 10],
-                     (self.x + 20, self.y))  # draw the second digit -- error: 'IndexError: list index out of range'
+            win.blit(scores[int(count / 10)], (self.x, self.y))  # draw the first digit
+            win.blit(scores[count % 10], (self.x + 20, self.y))  # draw the second digit
 
         for obstacle1 in pipe1:  # if there is an obstacle1 in pipe1
             if obstacle1.x < Bird.x < obstacle1.x + 52 and lock == 0:  # if obstacle x is less then bird x and bird x is less then onbstacle x + 52 and lock is equal to 0
