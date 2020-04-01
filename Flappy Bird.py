@@ -1,12 +1,12 @@
 # todo Improve the score system
-# todo Make start screen
+# todo Pause the game while in start screen
 # todo Make death screen
 # todo Eliminate clipping
 
 import pygame  # import Pygame and Random
 import random
 
-pygame.init()  # initiate the pygame
+pygame.init()  # initiate pygame
 
 w, h = 288, 512  # set the width and height of the pygame window
 
@@ -41,6 +41,7 @@ clock = pygame.time.Clock()
 count = 0  # second digit in tens -- only digit in ones
 lock = 0  # lock the score from increasing by more then 1
 scoreMulti = 0  # first digit in tens -- nonexistent in ones
+play = 0
 
 # define the position of the ground
 groundLevel = 375
@@ -67,7 +68,7 @@ class Death(object):
         self.height = height  # defining height
 
     def draw(self, win):  # defining the function to draw the death screen
-        win.blit(gameover, (self.x, self.y))
+        win.blit(gameover, (self.x, self.y)) 
 
 
 # create the player object
@@ -145,19 +146,76 @@ class Score(object):
         if count <= 9:  # if count is less then or equal to 9 then move on
             win.blit(scores[count], (self.x, self.y))  # draw the score as long as it is below 9
         elif count > 9:
-            win.blit(scores[int(count / 10)], (self.x, self.y))  # draw the first digit
-            win.blit(scores[count % 10], (self.x + 20, self.y))  # draw the second digit
+            win.blit(scores[int(count / 10)], (self.x, self.y))  # draw the first digit *bug* index out of range when score reaches 19 see line 118
+            win.blit(scores[count % 10], (self.x + 20, self.y))  # draw the second digit -- error: 'IndexError: list index out of range'
 
         for obstacle1 in pipe1:  # if there is an obstacle1 in pipe1
             if obstacle1.x < Bird.x < obstacle1.x + 52 and lock == 0:  # if obstacle x is less then bird x and bird x is less then onbstacle x + 52 and lock is equal to 0
-                count += 1  # add one to count
                 lock = 1  # redefine lock as equaling 1
+                count += 1  # add one to count
             elif obstacle1.x < Bird.x > obstacle1.x + 52:  # if obstacle x is less then bird x and bird x is greater then obstacle x + 52
                 lock = 0  # redefine lock as 0
+
+run = True  # define run as True to initiate the loop
+
+class Main(object):
+    def __init__(self, clockSpeed, runStatus):
+        self.clockSpeed = clockSpeed
+        self.runStatus = runStatus
+
+    def mainLoop(self):
+        while self.runStatus:
+            clock.tick(self.clockSpeed)  # setting the tick speed
+
+            for event in pygame.event.get():  # testing for if the players exits the window
+                if event.type == pygame.QUIT:
+                    self.runStatus = False  # stopping the loop
+                    pygame.quit()  # quiting the window
+                    quit()
+
+                if event.type == pygame.USEREVENT + 2:  # testing if the userevent is + 2
+                    r1 = random.randrange(-300, -100)  # define a y pos for the pipes
+                    pipe1.append(CityEnemy2(300, r1, 64, 64))  # adding the pipe objects to the arrays with the random y pos
+                    pipe2.append(CityEnemy1(300, r1 + 400, 64, 64))
+
+            for obstacle1 in pipe1:  # while there is a pipe obstacle in that array move down
+                obstacle1.x -= 5  # move the obstacle -5 each time the while loop loops
+                if obstacle1.x < obstacle1.width * -1:  # If the obstacle is off the screen remove it
+                    pipe1.pop(pipe1.index(obstacle1))  # destroying the offscreen pipes
+
+            for obstacle2 in pipe2:  # while there is a pipe obstacle in that array move down
+                obstacle2.x -= 5  # move the obstacle -5 each time it loops
+                if obstacle2.x < obstacle2.width * -1:  # If the obstacle is off the screen move it
+                    pipe2.pop(pipe2.index(obstacle2))  # destroying the offscreen pipes
+
+            keys = pygame.key.get_pressed()  # assigning keys to the pygame event
+
+            if keys[pygame.K_SPACE] and Bird.y > Bird.vel:  # checking if the player presses the jump button
+                Bird.isJump = True  # making the bird jump
+            else:
+                Bird.isJump = False  # making the bird fall
+
+            if Bird.y >= groundLevel:  # checking if the bird hits the ground
+                self.runStatus = False  # stops the while loop -- change to show death screen then the start screen
+
+            for obstacle2 in pipe2:  # while there is a pipe obstacle in that array move to next line
+                if obstacle2.x < Bird.x < obstacle2.x + 52 and Bird.y > obstacle2.y:  # if the bird is at the same x and y pos as the pipe
+                    # print('DEAD')  #prints to the shell that you died (for troubleshooting purposes)
+                    self.runStatus = False  # stops the while loop, effectively ending the program -- change to show death screen then the start screen
+
+            for obstacle1 in pipe1:  # while there is a pipe obstacle in that array move to next line
+                if obstacle1.x < Bird.x < obstacle1.x + 52 and Bird.y < obstacle1.y + 300:  # if the bird is at the same x and y pos as the pipe
+                    # print('DEAD')  # prints that you died (for troubleshooting purposes)
+                    # print(count)  # prints the score (for troubleshooting purposes)
+                    self.runStatus = False  # stops the while loop, effectively ending the program -- change to show death screen then the start screen
+
+            # refreshing the screen
+            redrawWindow()
 
 
 # define the method of refreshing the screen
 def redrawWindow():
+    global play
     # drawing all the objects
     win.blit(bg, (0, 0))
     Bird.draw(win)
@@ -167,69 +225,27 @@ def redrawWindow():
         obstacle2.draw(win)
     Scores.draw(win)
     win.blit(normalFg, (0, 400))
-    # StartMenu.draw(win)
+    if play == 0:  # if play is equal to 0 then draw the start screen
+        StartMenu.draw(win)
+
+        keys = pygame.key.get_pressed()  # assigning keys to the pygame event
+
+        if keys[pygame.K_SPACE]:  # checking if the player presses the jump button
+            play += 1
     # DeathScreen.draw(win)
     pygame.display.update()  # updating the display
 
 
-# defining the coordinates of the objects and width and height
+# defining the coordinates of the objects and width + height
 Bird = Player(125, 200, 34, 24)  # setting the x pos, y pos, width and height of the bird
 Scores = Score(125, 20, 24, 36)
 StartMenu = Menu(0, 0, 184, 267)
 DeathScreen = Death(50, 150, 184, 267)
-run = True  # define run as True to initiate the loop
+GameLoop = Main(20, True)
 
 pipe1 = []  # create arrays for the obstacles to go in
 pipe2 = []
 
-pygame.time.set_timer(pygame.USEREVENT + 2, random.randrange(2000, 3500))  # create event to continously make pipes
+pygame.time.set_timer(pygame.USEREVENT + 2, random.randrange(2000, 3500))  # create event to continuously make pipes
 
-# creating the main game loop
-while run:
-    clock.tick(15)  # setting the tick speed
-
-    for event in pygame.event.get():  # testing for if the players exits the window
-        if event.type == pygame.QUIT:
-            run = False  # stopping the loop
-            pygame.quit()  # quiting the window
-            quit()
-
-        if event.type == pygame.USEREVENT + 2:  # testing if the userevent is + 2
-            r1 = random.randrange(-300, -100)  # define a y pos for the pipes
-            r2 = random.randrange(170, 350)
-            pipe1.append(CityEnemy2(300, r1, 64, 64))  # adding the pipe objects to the arrays with the random y pos
-            pipe2.append(CityEnemy1(300, r1 + 400, 64, 64))
-
-    for obstacle1 in pipe1:  # while there is a pipe obstacle in that array move down
-        obstacle1.x -= 5  # move the obstacle -5 each time the while loop loops
-        if obstacle1.x < obstacle1.width * -1:  # If the obstacle is off the screen remove it
-            pipe1.pop(pipe1.index(obstacle1))  # destroying the offscreen pipes
-
-    for obstacle2 in pipe2:  # while there is a pipe obstacle in that array move down
-        obstacle2.x -= 5  # move the obstacle -5 each time it loops
-        if obstacle2.x < obstacle2.width * -1:  # If the obstacle is off the screen move it
-            pipe2.pop(pipe2.index(obstacle2))  # destroying the offscreen pipes
-
-    keys = pygame.key.get_pressed()  # assigning keys to the pygame event
-
-    if keys[pygame.K_SPACE] and Bird.y > Bird.vel:  # checking if the player presses the jump button
-        Bird.isJump = True  # making the bird jump
-    else:
-        Bird.isJump = False  # making the bird fall
-
-    if Bird.y >= groundLevel:  # checking if the bird hits the ground
-        run = False  # stops the while loop
-
-    for obstacle2 in pipe2:  # while there is a pipe obstacle in that array move to next line
-        if obstacle2.x < Bird.x < obstacle2.x + 52 and Bird.y > obstacle2.y:  # if the bird is at the same x and y pos as the pipe
-            # print('DEAD')  #prints to the shell that you died (for troubleshooting purposes)
-            run = False  # stops the while loop, effectively ending the program
-
-    for obstacle1 in pipe1:  # while there is a pipe obstacle in that array move to next line
-        if obstacle1.x < Bird.x < obstacle1.x + 52 and Bird.y < obstacle1.y + 300:  # if the bird is at the same x and y pos as the pipe
-            # print('DEAD')  # prints that you died (for troubleshooting purposes)
-            # print(count)  # prints the score (for troubleshooting purposes)
-            run = False  # stops the while loop, effectively ending the program
-
-    # refreshing the screen
-    redrawWindow()
+GameLoop.mainLoop()  # activate the main loop
