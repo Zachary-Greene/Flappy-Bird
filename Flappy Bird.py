@@ -1,9 +1,4 @@
-# top is prioritised
-# todo Pause the game while in start screen
-# todo Make death screen
-# todo Eliminate clipping
-
-import pygame  # import Pygame and Random
+import pygame  # import Pygame, Random
 import random
 
 pygame.init()  # initiate pygame
@@ -14,26 +9,29 @@ win = pygame.display.set_mode((w, h))  # define win as the size of the window
 pygame.display.set_caption('Flappy Bird')  # set the window title to Flappy Bird
 
 # define variables as image frames/sprites
-normalBird = [pygame.image.load('r1.png'), pygame.image.load('r2.png'), pygame.image.load('r3.png')]
-BirdJump1 = [pygame.image.load('f1.png'), pygame.image.load('f2.png'), pygame.image.load('f3.png')]
-BirdJump2 = [pygame.image.load('f4.png'), pygame.image.load('f5.png'), pygame.image.load('f6.png')]
-BirdJump3 = [pygame.image.load('f7.png'), pygame.image.load('f8.png'), pygame.image.load('f9.png')]
-scores = [pygame.image.load('0.png'), pygame.image.load('1.png'), pygame.image.load('2.png'),
-          pygame.image.load('3.png'), pygame.image.load('4.png'), pygame.image.load('5.png'),
-          pygame.image.load('6.png'), pygame.image.load('7.png'), pygame.image.load('8.png'),
-          pygame.image.load('9.png')]
+normalBird = [pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\r1.png'),
+              pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\r2.png'),
+              pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\r3.png')]
+scores = [pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\0.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\1.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\2.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\3.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\4.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\5.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\6.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\7.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\8.png'),
+          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\9.png')]
 
 # define variables for backgrounds and menus
-bg = pygame.image.load('bg.png')
-normalFg = pygame.image.load('fg.png')
-# cityFg = pygame.image.load('CityFg.png')  # in progress
-start = pygame.image.load('st.png')
-gameover = pygame.image.load('gameover.png')
+bg = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\bg.png')
+normalFg = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\fg.png')
 
-normalPipe = pygame.image.load('pipe.png')  # normal up pipe
-normalPipe2 = pygame.image.load('pipe2.png')  # normal down pipe
-# CityPipe1 = pygame.image.load('CityPipe1.png')  # city up pipe -- in progress
-# CityPipe2 = pygame.image.load('CityPipe2.png')  # city down pipe -- in progress
+startscreen = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\st.png')
+deathscreen = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\gameover.png')
+
+normalPipe = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\pipe.png')  # normal up pipe
+normalPipe2 = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\pipe2.png')  # normal down pipe
 
 # define clock as the tick
 clock = pygame.time.Clock()
@@ -41,36 +39,12 @@ clock = pygame.time.Clock()
 count = 0  # second digit in tens -- only digit in ones
 lock = 0  # lock the score from increasing by more then 1
 scoreMulti = 0  # first digit in tens -- nonexistent in ones
-play = False
 
-pause = False
+dead = False
+dead_count = 0
 
 # define the position of the ground
 groundLevel = 375
-
-
-# create the Menu object  --  couldn't figure out how to get it to work, gave up after a month
-# class Menu(object):
-#     def __init__(self, x, y, width, height):  # creating variables to set object position and width + height
-#         self.x = x  # defining x
-#         self.y = y  # defining y
-#         self.width = width  # defining width
-#         self.height = height  # defining height
-#
-#     def draw(self, win):  # defining the function to draw the start menu
-#         win.blit(start, (self.x, self.y))
-
-
-# creating the death screen object  --  couldn't figure out how to get it to work, gave up after a month
-# class Death(object):
-#     def __init__(self, x, y, width, height):  # creating variables to set object position and width + height
-#         self.x = x  # defining x
-#         self.y = y  # defining y
-#         self.width = width  # defining width
-#         self.height = height  # defining height
-#
-#     def draw(self, win):  # defining the function to draw the death screen
-#         win.blit(gameover, (self.x, self.y))
 
 
 # create the player object
@@ -85,6 +59,7 @@ class Player(object):
         self.isJump = False  # defining whether the player can jump or not
         self.walkCount = 0  # defining the beginning frame of the player animation
         self.hitbox = (self.x, self.y, self.width, self.height)  # create the hitbox
+        self.rect = 0
 
     def draw(self, win):  # defining the function to to draw and animate the player
         if self.walkCount + 1 >= 3:  # testing if the animation frame is beyond the frame count
@@ -98,8 +73,8 @@ class Player(object):
             win.blit(self.birdType[0], (self.x, self.y))  # setting the frame to the first one
             self.y += self.vel  # making the player fall
 
-        # pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # draw the hitbox
-        # self.hitbox = (self.x, self.y, self.width, self.height)  # create the hitbox
+        pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # draw the hitbox
+        self.hitbox = (self.x, self.y, self.width, self.height)  # create the hitbox
 
 
 # define the first pipe object
@@ -169,19 +144,18 @@ class Score(object):
                 lock = 0  # redefine lock as 0
 
 
-run = True
-
-
 class Main(object):
     def __init__(self, clockSpeed, runStatus):
         self.clockSpeed = clockSpeed
         self.runStatus = runStatus
 
     def mainLoop(self):
-        global count, pause
+        global count, dead, dead_count, run
 
         while self.runStatus:
             clock.tick(self.clockSpeed)  # setting the tick speed
+
+            redrawWindow()
 
             for event in pygame.event.get():  # testing for if the players exits the window
                 if event.type == pygame.QUIT:
@@ -189,10 +163,14 @@ class Main(object):
                     pygame.quit()  # quiting the window
                     quit()
 
-                if event.type == pygame.USEREVENT + 2 and pause is False:  # testing if the userevent is + 2
+                if event.type == pygame.USEREVENT + 2:  # testing if the userevent is + 2
                     r1 = random.randrange(-300, -100)  # define a y pos for the pipes
                     pipe1.append(CityEnemy2(300, r1, 52, 320))  # adding the pipe objects to the arrays with the random y pos
                     pipe2.append(CityEnemy1(300, r1 + 400, 52, 320))
+
+            if dead:
+                if dead_count >= 1:
+                    startScreen()
 
             for obstacle1 in pipe1:  # for every pipe obstacle in that array
                 obstacle1.x -= 5  # move the obstacle -5 each time the while loop loops
@@ -214,50 +192,63 @@ class Main(object):
             if Bird.y >= groundLevel:  # checking if the bird hits the ground
                 Bird.x = 125  # resetting the birds x and y vals
                 Bird.y = 200
-                count -= count  # resetting the score
-                # pipe1.pop(pipe1.index(obstacle1))  # says variable referenced before assignment on both
-                # pipe2.pop(pipe2.index(obstacle2))
-
-                # self.runStatus = False  # stops the while loop -- change to show death screen then the start screen
+                try:
+                    pipe1.pop(pipe1.index(obstacle1))  # removing the pipe obstacles from the screen
+                    pipe2.pop(pipe2.index(obstacle2))
+                    count -= count  # resetting the score
+                    dead = True
+                    dead_count += 1
+                except:
+                    count -= count  # resetting the score
+                    dead = True
+                    dead_count += 1
 
             for obstacle2 in pipe2:  # for every pipe obstacle in that array
-                if obstacle2.x < Bird.x < obstacle2.x + 52 and Bird.y > obstacle2.y:  # if the bird is at the same x and y pos as the pipe
-                    # print('DEAD')  #prints to the shell that you died (for troubleshooting purposes)
+                if obstacle2.hitbox[0] <= Bird.hitbox[0] + 34 <= obstacle2.hitbox[0] + 80 and Bird.hitbox[1] + 24 >= obstacle2.hitbox[1]:
                     Bird.x = 125  # resetting the birds x and y vals
                     Bird.y = 200
-                    pipe1.pop(pipe1.index(obstacle1))  # removing the pipe obstacles from the screen
-                    pipe2.pop(pipe2.index(obstacle2))
+                    pipe1.clear()  # removing the pipe obstacles from the screen
+                    pipe2.clear()
                     count -= count  # resetting the score
-                #     # self.runStatus = False  # stops the while loop, effectively ending the program
-
-                # if obstacle2.x < Bird.x < obstacle2.x + obstacle2.width:
-                #     if Bird.y > obstacle2.y - Bird.height:
-                #         Bird.x = 125  # resetting the birds x and y vals
-                #         Bird.y = 200
-                #         pipe1.pop(pipe1.index(obstacle1))  # removing the pipe obstacles from the screen
-                #         pipe2.pop(pipe2.index(obstacle2))
-                #         count -= count  # resetting the score
-                #     # self.runStatus = False  # stops the while loop, effectively ending the program
-
+                    dead = True
+                    dead_count += 1
 
             for obstacle1 in pipe1:  # while there is a pipe obstacle in that array move to next line
-                if obstacle1.x < Bird.x < obstacle1.x + 52 and Bird.y < obstacle1.y + 300:  # if the bird is at the same x and y pos as the pipe
-                    # print('DEAD')  # prints that you died (for troubleshooting purposes)
-                    # print(count)  # prints the score (for troubleshooting purposes)
+                if obstacle1.hitbox[0] <= Bird.hitbox[0] + 34 <= obstacle1.hitbox[0] + 80 and obstacle1.hitbox[1] <= \
+                        Bird.hitbox[1] <= obstacle1.hitbox[1] + 320:
                     Bird.x = 125  # resetting the birds x and y vals
                     Bird.y = 200
-                    pipe1.pop(pipe1.index(obstacle1))  # removing the pipe obstacles from the screen
-                    pipe2.pop(pipe2.index(obstacle2))
+                    pipe1.clear()  # removing the pipe obstacles from the screen
+                    pipe2.clear()
                     count -= count  # resetting the score
-                    # self.runStatus = False  # stops the while loop, effectively ending the program
+                    dead = True
+                    dead_count += 1
 
-            # refreshing the screen
-            redrawWindow()
+
+def startScreen():
+    global dead_count
+    run = True
+    while run:
+        win.blit(bg, (0, 0))
+        win.blit(normalFg, (0, 400))
+        win.blit(startscreen, (0, 0))
+        pygame.display.update()
+        keys = pygame.key.get_pressed()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                break
+            if keys[pygame.K_SPACE]:
+                dead_count = 0
+                Bird.x = 125
+                Bird.y = 200
+                GameLoop.mainLoop()
 
 
 # define the method of refreshing the screen
 def redrawWindow():
-    global play, pause
+    global dead
     # drawing all the objects
     win.blit(bg, (0, 0))
     Bird.draw(win)
@@ -267,8 +258,10 @@ def redrawWindow():
         obstacle2.draw(win)
     Scores.draw(win)
     win.blit(normalFg, (0, 400))
-    # StartScreen.draw(win)
-    # DeathScreen.draw(win)
+
+    # if dead:
+    #     win.blit(deathscreen, (48, 160))
+
     pygame.display.update()  # updating the display
 
 
@@ -284,4 +277,4 @@ pipe2 = []
 
 pygame.time.set_timer(pygame.USEREVENT + 2, random.randrange(2000, 3500))  # create event to continuously make pipes
 
-GameLoop.mainLoop()  # activate the main loop
+startScreen()  # activate the main loop
