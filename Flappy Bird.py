@@ -145,9 +145,9 @@ class Score(object):
 
 
 class Main(object):
-    def __init__(self, clockSpeed, runStatus):
-        self.clockSpeed = clockSpeed
-        self.runStatus = runStatus
+    def __init__(self, clockSpeed, runStatus):  # create variable to store the clockSpeed and runStatus
+        self.clockSpeed = clockSpeed  # defining clockSpeed
+        self.runStatus = runStatus  # defining runStatus
 
     def mainLoop(self):
         global count, dead, dead_count, run
@@ -155,7 +155,7 @@ class Main(object):
         while self.runStatus:
             clock.tick(self.clockSpeed)  # setting the tick speed
 
-            redrawWindow()
+            redrawWindow()  # draw everything to the screen
 
             for event in pygame.event.get():  # testing for if the players exits the window
                 if event.type == pygame.QUIT:
@@ -168,9 +168,9 @@ class Main(object):
                     pipe1.append(CityEnemy2(300, r1, 52, 320))  # adding the pipe objects to the arrays with the random y pos
                     pipe2.append(CityEnemy1(300, r1 + 400, 52, 320))
 
-            if dead:
-                if dead_count >= 1:
-                    startScreen()
+            if dead:  # check if dead is True
+                if dead_count >= 1:  # check if the players dead_count is more or equal to 1
+                    startScreen()  # show the start screen
 
             for obstacle1 in pipe1:  # for every pipe obstacle in that array
                 obstacle1.x -= 5  # move the obstacle -5 each time the while loop loops
@@ -193,15 +193,15 @@ class Main(object):
                 Bird.x = 125  # resetting the birds x and y vals
                 Bird.y = 200
                 try:
-                    pipe1.pop(pipe1.index(obstacle1))  # removing the pipe obstacles from the screen
-                    pipe2.pop(pipe2.index(obstacle2))
+                    pipe1.clear()  # removing the pipe obstacles from the screen
+                    pipe2.clear()
                     count -= count  # resetting the score
-                    dead = True
-                    dead_count += 1
+                    dead = True  # make the player dead
+                    dead_count += 1  # incremente the dead_count by 1
                 except:
                     count -= count  # resetting the score
-                    dead = True
-                    dead_count += 1
+                    dead = True  # make the player dead
+                    dead_count += 1  # incremente the dead_count by 1
 
             for obstacle2 in pipe2:  # for every pipe obstacle in that array
                 if obstacle2.hitbox[0] <= Bird.hitbox[0] + 34 <= obstacle2.hitbox[0] + 80 and Bird.hitbox[1] + 24 >= obstacle2.hitbox[1]:
@@ -210,8 +210,8 @@ class Main(object):
                     pipe1.clear()  # removing the pipe obstacles from the screen
                     pipe2.clear()
                     count -= count  # resetting the score
-                    dead = True
-                    dead_count += 1
+                    dead = True  # make the player dead
+                    dead_count += 1  # incremente the dead_count by 1
 
             for obstacle1 in pipe1:  # while there is a pipe obstacle in that array move to next line
                 if obstacle1.hitbox[0] <= Bird.hitbox[0] + 34 <= obstacle1.hitbox[0] + 80 and obstacle1.hitbox[1] <= \
@@ -221,34 +221,33 @@ class Main(object):
                     pipe1.clear()  # removing the pipe obstacles from the screen
                     pipe2.clear()
                     count -= count  # resetting the score
-                    dead = True
-                    dead_count += 1
+                    dead = True  # make the player dead
+                    dead_count += 1  # increment the dead_count by 1
 
 
 def startScreen():
     global dead_count
-    run = True
+    run = True  # setting run as True
     while run:
-        win.blit(bg, (0, 0))
+        win.blit(bg, (0, 0)) # draw everything necessary to the screen
         win.blit(normalFg, (0, 400))
         win.blit(startscreen, (0, 0))
-        pygame.display.update()
-        keys = pygame.key.get_pressed()
+        pygame.display.update() # update the display
+        keys = pygame.key.get_pressed()  # define keys
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-                break
-            if keys[pygame.K_SPACE]:
-                dead_count = 0
-                Bird.x = 125
+            if event.type == pygame.QUIT:  # if there is the user presses the quit button
+                run = False  # change run to false
+                pygame.quit()  # quit the module
+                break  # quit the program
+            if keys[pygame.K_SPACE]:  # check if the player presses space
+                dead_count = 0  # set dead_count to 0
+                Bird.x = 125  # set the bird position to the center of the screen
                 Bird.y = 200
-                GameLoop.mainLoop()
+                GameLoop.mainLoop()  # enter the main game loop
 
 
 # define the method of refreshing the screen
 def redrawWindow():
-    global dead
     # drawing all the objects
     win.blit(bg, (0, 0))
     Bird.draw(win)
@@ -258,18 +257,12 @@ def redrawWindow():
         obstacle2.draw(win)
     Scores.draw(win)
     win.blit(normalFg, (0, 400))
-
-    # if dead:
-    #     win.blit(deathscreen, (48, 160))
-
     pygame.display.update()  # updating the display
 
 
 # defining the coordinates of the objects and width + height
 Bird = Player(125, 200, 34, 24, normalBird)  # setting the x pos, y pos, width, height and type of bird
 Scores = Score(125, 20, 24, 36)
-# StartScreen = Menu(0, 0, 288, 512)
-# DeathScreen = Death(50, 150, 184, 267)
 GameLoop = Main(20, True)
 
 pipe1 = []  # create arrays for the obstacles to go in
