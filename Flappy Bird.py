@@ -73,7 +73,7 @@ class Player(object):
             win.blit(self.birdType[0], (self.x, self.y))  # setting the frame to the first one
             self.y += self.vel  # making the player fall
 
-        pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # draw the hitbox
+        # pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # draw the hitbox
         self.hitbox = (self.x, self.y, self.width, self.height)  # create the hitbox
 
 
@@ -91,7 +91,7 @@ class CityEnemy1(object):
     def draw(self, win):  # defining the function to draw the object
         win.blit(self.img, (self.x, self.y))  # drawing the object with the given x and y coords
 
-        pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # draw the hitbox
+        # pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # draw the hitbox
         self.hitbox = (self.x - 5, self.y, self.width, self.height)  # create the hitbox
 
 
@@ -109,7 +109,7 @@ class CityEnemy2(object):
     def draw(self, win):  # defining the function to draw the object
         win.blit(self.img, (self.x, self.y))  # drawing the object with the given x and y coords
 
-        pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # draw the hitbox
+        # pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # draw the hitbox
         self.hitbox = (self.x - 5, self.y, self.width, self.height)  # create the hitbox
 
 
