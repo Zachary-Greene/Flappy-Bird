@@ -229,10 +229,10 @@ def startScreen():
     global dead_count
     run = True  # setting run as True
     while run:
-        win.blit(bg, (0, 0)) # draw everything necessary to the screen
+        win.blit(bg, (0, 0))  # draw everything necessary to the screen
         win.blit(normalFg, (0, 400))
         win.blit(startscreen, (0, 0))
-        pygame.display.update() # update the display
+        pygame.display.update()  # update the display
         keys = pygame.key.get_pressed()  # define keys
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # if there is the user presses the quit button
