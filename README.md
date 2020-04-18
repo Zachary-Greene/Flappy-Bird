@@ -14,7 +14,7 @@ This will guide you through setting up a development environment with different 
 Pycharm:
 1. Open pycharm and import the .py file
 ```
-File > Open File > (Your File)
+File > Open File > (Open FlappyBird.py from where ever you saved it)
 ```
 2. Press the green play button
 3. Choose an interpreter
