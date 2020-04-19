@@ -1,6 +1,6 @@
 # Flappy Bird Clone
 
-This program is a clone of the popular Flappy Bird. It has a scoring system and will have a highscore system, death screen and menu screen.
+This program is a clone of the popular Flappy Bird. It has a scoring system and menu screen.
 Included within the repository is a copy of this readme file, a license file and a python file. I am not taking credit for designing the graphics and/or gameplay. This is just a project that I wanted to challenge myself with.
 
 ## Prerequisites
