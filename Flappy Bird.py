@@ -9,29 +9,29 @@ win = pygame.display.set_mode((w, h))  # define win as the size of the window
 pygame.display.set_caption('Flappy Bird')  # set the window title to Flappy Bird
 
 # define variables as image frames/sprites
-normalBird = [pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\r1.png'),
-              pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\r2.png'),
-              pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\r3.png')]
-scores = [pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\0.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\1.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\2.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\3.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\4.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\5.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\6.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\7.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\8.png'),
-          pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\9.png')]
+normalBird = [pygame.image.load('Assets/r1.png'),
+              pygame.image.load('Assets/r2.png'),
+              pygame.image.load('Assets/r3.png')]
+scores = [pygame.image.load('Assets/0.png'),
+          pygame.image.load('Assets/1.png'),
+          pygame.image.load('Assets/2.png'),
+          pygame.image.load('Assets/3.png'),
+          pygame.image.load('Assets/4.png'),
+          pygame.image.load('Assets/5.png'),
+          pygame.image.load('Assets/6.png'),
+          pygame.image.load('Assets/7.png'),
+          pygame.image.load('Assets/8.png'),
+          pygame.image.load('Assets/9.png')]
 
 # define variables for backgrounds and menus
-bg = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\bg.png')
-normalFg = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\fg.png')
+bg = pygame.image.load('Assets/bg.png')
+normalFg = pygame.image.load('Assets/fg.png')
 
-startscreen = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\st.png')
-deathscreen = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\gameover.png')
+startscreen = pygame.image.load('Assets/st.png')
+deathscreen = pygame.image.load('Assets/gameover.png')
 
-normalPipe = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\pipe.png')  # normal up pipe
-normalPipe2 = pygame.image.load('C:\\Users\\zacha\\OneDrive\\Desktop\\PythonScripts\\FlappyBird\\pipe2.png')  # normal down pipe
+normalPipe = pygame.image.load('Assets/pipe.png')  # normal up pipe
+normalPipe2 = pygame.image.load('Assets/pipe2.png')  # normal down pipe
 
 # define clock as the tick
 clock = pygame.time.Clock()
